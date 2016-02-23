@@ -20,8 +20,16 @@ The Byteman Helper checks if object is Serialiable or not.
 ## Runtime
 
 Copy the War file to the JBoss `deployement` directory
+
 Modify `standalone.conf` like this 
 
+```
+JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman,net.a.g"
+BYTEMAN_JAR=${MAVEN_REPO}/org/jboss/byteman/byteman/3.0.3/byteman-3.0.3.jar
+BYTEMAN_CONF=./ExtractGrape
+
+JAVA_OPTS="${JAVA_OPTS} -Dorg.jboss.byteman.verbose -Dorg.jboss.byteman.transform.all -javaagent:${BYTEMAN_JAR}=script:${BYTEMAN_CONF}/sessionintrospection.btm,sys:${BYTEMAN_CONF}/target/ExtractGrape-0.0.1-SNAPSHOT-jar-with-dependencies.jar,policy:true,boot:${BYTEMAN_JAR},listener:true"
+```
 
 
 ## Result 
