@@ -7,6 +7,7 @@ public class TestBean2 implements Serializable {
 	private String hello;
 	private int hi;
 	private boolean toto;
+	private TestBean3 bean3;
 
 	public String getHello() {
 		return hello;
@@ -30,6 +31,14 @@ public class TestBean2 implements Serializable {
 
 	public void setToto(boolean toto) {
 		this.toto = toto;
+	}
+
+	public TestBean3 getBean3() {
+		return bean3;
+	}
+
+	public void setBean3(TestBean3 bean3) {
+		this.bean3 = bean3;
 	}
 
 }
