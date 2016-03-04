@@ -1,5 +1,6 @@
 package org.jboss.as.quickstarts.helloworld;
 
+import java.util.List;
 
 public class TestBean {
 
@@ -7,6 +8,7 @@ public class TestBean {
 	private int hi;
 	private boolean toto;
 	private TestBean2 titi;
+	private List<TestBean4> listBean;
 
 	public TestBean2 getTiti() {
 		return titi;
@@ -39,5 +41,14 @@ public class TestBean {
 	public void setToto(boolean toto) {
 		this.toto = toto;
 	}
+
+	public List<TestBean4> getListBean() {
+		return listBean;
+	}
+
+	public void setListBean(List<TestBean4> listBean) {
+		this.listBean = listBean;
+	}
+	
 
 }
