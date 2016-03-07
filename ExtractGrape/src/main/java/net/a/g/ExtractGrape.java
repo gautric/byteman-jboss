@@ -2,6 +2,9 @@ package net.a.g;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Set;
 
 import org.jboss.byteman.rule.Rule;
@@ -20,15 +23,16 @@ public class ExtractGrape extends Helper {
 			return;
 		}
 
-		Class[] oo = clazz.getInterfaces();
+		Class[] interfacesArray = clazz.getInterfaces();
 		boolean isSerializable = false;
-		for (Class class1 : oo) {
-			if (class1.equals(Serializable.class)) {
+		for (Class interf : interfacesArray) {
+			if (interf.equals(Serializable.class)) {
 				System.out.println("##ByteMan "+ clazz.getName() + " Serializable OK");
 				isSerializable = true;
 				break;
-			}
+			}		
 		}
+
 		if (!isSerializable) {
 			System.out.println("##ByteMan "+ clazz.getName() + " Serializable KO");
 
@@ -38,9 +42,24 @@ public class ExtractGrape extends Helper {
 				ReflectionUtils.withModifier(java.lang.reflect.Modifier.PUBLIC), ReflectionUtils.withPrefix("get")));
 
 		for (Method method : methods) {
-			Class clazz2 = method.getReturnType();
-			extract(clazz2);
+			Class returnClass = method.getReturnType();
+			// Gestion des collections
+			if (Collection.class.isAssignableFrom(returnClass)) {
+				Type returnType = method.getGenericReturnType();
+				if (returnType instanceof ParameterizedType) {
+					ParameterizedType paramType = (ParameterizedType) returnType;
+					Type[] argTypes = paramType.getActualTypeArguments();
+					if (argTypes.length > 0) {
+						extract((Class<?>)argTypes[0]);
+					}
+				}
+			}else {    			
+				Class clazz2 = method.getReturnType();
+				extract(clazz2);
+			}
 		}
+
 	}
+
 
 }

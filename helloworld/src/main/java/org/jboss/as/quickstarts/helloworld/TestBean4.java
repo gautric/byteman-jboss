@@ -1,19 +1,12 @@
-package net.a.g;
+package org.jboss.as.quickstarts.helloworld;
 
-public class TestBean {
+import java.io.Serializable;
+
+public class TestBean4 implements Serializable {
 
 	private String hello;
 	private int hi;
 	private boolean toto;
-	private TestBean2 titi;
-
-	public TestBean2 getTiti() {
-		return titi;
-	}
-
-	public void setTiti(TestBean2 titi) {
-		this.titi = titi;
-	}
 
 	public String getHello() {
 		return hello;

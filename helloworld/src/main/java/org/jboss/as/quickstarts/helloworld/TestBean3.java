@@ -1,7 +1,8 @@
-package net.a.g;
+package org.jboss.as.quickstarts.helloworld;
+
 import java.io.Serializable;
 
-public class TestBean2 implements Serializable {
+public class TestBean3 implements Serializable {
 
 	private String hello;
 	private int hi;

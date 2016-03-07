@@ -18,6 +18,8 @@ package org.jboss.as.quickstarts.helloworld;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -62,6 +64,9 @@ public class HelloWorldSessionServlet extends HttpServlet {
 		
 		TestBean ttoo = new TestBean();
 		ttoo.setTiti(new TestBean2());
+		List<TestBean3> beanlist = new ArrayList<>();
+		beanlist.add(new TestBean3());
+		System.out.println("-- set attribute bean "+ttoo);
 		req.getSession(true).setAttribute("bean", ttoo);
 
 		writer.println(PAGE_FOOTER);
