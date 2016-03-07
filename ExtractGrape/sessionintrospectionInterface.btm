@@ -1,0 +1,9 @@
+RULE introspect
+INTERFACE  javax.servlet.http.HttpSession
+METHOD void setAttribute(String, Object)
+HELPER net.a.g.ExtractGrape
+AT ENTRY
+IF true
+DO traceln("##ByteMan Call 'setAttribute([" + $1.getClass().getName() + "] " + $1 + " ,[" + $2.getClass().getName() + "] " + $2+")");
+ExtractGrape.extract($2.getClass());
+ENDRULE
