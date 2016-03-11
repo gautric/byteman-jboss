@@ -19,47 +19,50 @@ public class ExtractGrape extends Helper {
 	}
 
 	public static void extract(Class clazz) {
-		if (clazz.isPrimitive() || clazz.getName().equals("[B") || clazz.getName().startsWith("java.lang")) {
-			return;
-		}
-
-		Class[] interfacesArray = clazz.getInterfaces();
-		boolean isSerializable = false;
-		for (Class interf : interfacesArray) {
-			if (interf.equals(Serializable.class)) {
-				System.out.println("##ByteMan "+ clazz.getName() + " Serializable OK");
-				isSerializable = true;
-				break;
-			}		
-		}
-
-		if (!isSerializable) {
-			System.out.println("##ByteMan "+ clazz.getName() + " Serializable KO");
-
-		}
-
-		Set<Method> methods = ReflectionUtils.getMethods(clazz, Predicates.and(
-				ReflectionUtils.withModifier(java.lang.reflect.Modifier.PUBLIC), ReflectionUtils.withPrefix("get")));
-
-		for (Method method : methods) {
-			Class returnClass = method.getReturnType();
-			// Gestion des collections
-			if (Collection.class.isAssignableFrom(returnClass)) {
-				Type returnType = method.getGenericReturnType();
-				if (returnType instanceof ParameterizedType) {
-					ParameterizedType paramType = (ParameterizedType) returnType;
-					Type[] argTypes = paramType.getActualTypeArguments();
-					if (argTypes.length > 0) {
-						extract((Class<?>)argTypes[0]);
-					}
-				}
-			}else {    			
-				Class clazz2 = method.getReturnType();
-				extract(clazz2);
+		try {
+			if (clazz.isPrimitive() || clazz.getName().equals("[B") || clazz.getName().startsWith("java.lang")) {
+				return;
 			}
+
+			Class[] interfacesArray = clazz.getInterfaces();
+			boolean isSerializable = false;
+			for (Class interf : interfacesArray) {
+				if (interf.equals(Serializable.class)) {
+					System.out.println("##ByteMan " + clazz.getName() + " Serializable OK");
+					isSerializable = true;
+					break;
+				}
+			}
+
+			if (!isSerializable) {
+				System.out.println("##ByteMan " + clazz.getName() + " Serializable KO");
+
+			}
+
+			Set<Method> methods = ReflectionUtils.getMethods(clazz,
+					Predicates.and(ReflectionUtils.withModifier(java.lang.reflect.Modifier.PUBLIC),
+							ReflectionUtils.withPrefix("get")));
+
+			for (Method method : methods) {
+				Class returnClass = method.getReturnType();
+				// Gestion des collections
+				if (Collection.class.isAssignableFrom(returnClass)) {
+					Type returnType = method.getGenericReturnType();
+					if (returnType instanceof ParameterizedType) {
+						ParameterizedType paramType = (ParameterizedType) returnType;
+						Type[] argTypes = paramType.getActualTypeArguments();
+						if (argTypes.length > 0) {
+							extract((Class<?>) argTypes[0]);
+						}
+					}
+				} else {
+					Class clazz2 = method.getReturnType();
+					extract(clazz2);
+				}
+			}
+		} catch (Throwable t) {
+			System.out.println("##ByteMan Exception :" + t.getMessage());
 		}
-
 	}
-
 
 }
